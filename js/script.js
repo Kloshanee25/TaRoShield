@@ -14,7 +14,7 @@ async function scanMessage() {
   desc.innerText = "Analyzing message for smishing patterns...";
 
   try {
-    const response = await fetch("taroshield-production.up.railway.app", {
+    const response = await fetch("https://taroshield-production.up.railway.app/predict", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: text })  // ✅ Fixed: "text" not "message"
