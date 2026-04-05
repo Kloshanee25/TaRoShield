@@ -174,6 +174,11 @@ def predict():
     return jsonify({"label": label, "risk": risk, "threshold": THRESHOLD})
 
 
+@app.route("/")
+def home():
+    return "TaRoShield API is running"
+
+
 @app.route("/predict-batch", methods=["POST", "OPTIONS"])
 def predict_batch():
     if request.method == "OPTIONS":
