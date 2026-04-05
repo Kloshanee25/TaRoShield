@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TaRoShield</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="logo">
+    <img src="assets/logo_nav.png" alt="TaRoShield Logo" />
+    <span>TaRoShield</span>
+  </div>
+
+  <div class="menu">
+    <a href="index.html">SMS Checker</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="faq.html">FAQ</a>
+  </div>
+
+  <div class="nav-actions">
+    <button class="login-btn" onclick="location.href='login.html'">Login</button>
+    <button class="signup-btn" onclick="location.href='signup.html'">Sign Up</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <img src="assets/logo_center.png" alt="TaRoShield Main Logo" class="hero-logo" />
+  <h1>TaRoShield</h1>
+  <h2>Tamil & Romanized Tamil Smishing Detection System</h2>
+  <p>
+    TaRoShield is a web-based system that detects SMS smishing attacks written in Tamil and Romanized Tamil.
+    It helps users identify whether a received message is safe or malicious by analyzing the message content
+    using machine learning. This system is designed to protect people from online fraud, fake job offers,
+    prize scams, and banking threats.
+  </p>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+
+  <!-- SMS INPUT -->
+  <div class="card">
+    <h3>Analyze SMS Message</h3>
+    <p>Paste your SMS message below to check for potential smishing attacks in Tamil and Romanized Tamil</p>
+    <textarea id="smsText" placeholder="Paste SMS message here..."></textarea>
+    <button class="scan-btn" onclick="scanMessage()">Scan Message</button>
+  </div>
+
+  <!-- RESULT -->
+  <div class="card result" id="resultBox">
+    <img src="assets/logo_result.png" alt="Result Logo" />
+    <h4 id="resultTitle">Ready to Scan</h4>
+    <p id="resultText">
+      Enter an SMS message above to analyze it for potential smishing attempts.
+      Our system uses multiple detection engines to identify malicious patterns in Tamil and Romanized Tamil text.
+    </p>
+  </div>
+
+</div>
+
+<!-- External JS -->
+<script src="js/script.js"></script>
+
+</body>
+</html>

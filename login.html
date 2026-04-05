@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login – TaRoShield</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="navbar">
+  <div class="logo">
+    <div class="logo-icon"><img src="assets/logo_nav.png" alt="TaRoShield Logo"></div>
+    <span>TaRoShield</span>
+  </div>
+  <div class="menu">
+    <a href="index.html">SMS Checker</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="faq.html">FAQ</a>
+  </div>
+  <div class="nav-actions">
+    <button class="login-btn active" onclick="location.href='login.html'">Login</button>
+    <button class="signup-btn" onclick="location.href='signup.html'">Sign Up</button>
+  </div>
+</div>
+
+<div class="card login-card">
+  <h2 class="login-title">Login to TaRoShield</h2>
+  <p class="login-subtitle">Access your account securely</p>
+
+  <!-- Message box -->
+  <div id="msgBox" style="display:none; padding:12px; border-radius:8px; margin-bottom:16px; font-size:14px; text-align:center;"></div>
+
+  <div class="login-form">
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button class="login-submit" id="loginBtn" onclick="doLogin()">Login</button>
+  </div>
+
+  <p class="login-footer">
+    Don't have an account? <a href="signup.html">Sign up</a>
+  </p>
+</div>
+
+<script>
+async function doLogin() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const btn = document.getElementById("loginBtn");
+
+  if (!email || !password) {
+    showMsg("Please enter your email and password.", "error");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Logging in...";
+
+  try {
+    const res = await fetch("http://127.0.0.1:5000/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      showMsg("✅ " + data.message, "success");
+      // Save name to show on main page
+      localStorage.setItem("user_name", data.full_name);
+      localStorage.setItem("user_email", data.email);
+      setTimeout(() => location.href = "index.html", 1000);
+    } else {
+      showMsg("❌ " + data.message, "error");
+      btn.disabled = false;
+      btn.textContent = "Login";
+    }
+  } catch (err) {
+    showMsg("❌ Cannot connect to server. Make sure Flask is running.", "error");
+    btn.disabled = false;
+    btn.textContent = "Login";
+  }
+}
+
+function showMsg(text, type) {
+  const box = document.getElementById("msgBox");
+  box.textContent = text;
+  box.style.display = "block";
+  box.style.background = type === "success" ? "rgba(46,204,113,0.15)" : "rgba(231,76,60,0.15)";
+  box.style.border = type === "success" ? "1px solid #2ecc71" : "1px solid #e74c3c";
+  box.style.color = type === "success" ? "#2ecc71" : "#e74c3c";
+}
+
+document.addEventListener("keydown", e => { if (e.key === "Enter") doLogin(); });
+</script>
+</body>
+</html>

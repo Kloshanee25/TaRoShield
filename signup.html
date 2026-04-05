@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sign Up – TaRoShield</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="navbar">
+  <div class="logo">
+    <div class="logo-icon"><img src="assets/logo_nav.png" alt="TaRoShield Logo"></div>
+    <span>TaRoShield</span>
+  </div>
+  <div class="menu">
+    <a href="index.html">SMS Checker</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="faq.html">FAQ</a>
+  </div>
+  <div class="nav-actions">
+    <button class="login-btn" onclick="location.href='login.html'">Login</button>
+    <button class="signup-btn active" onclick="location.href='signup.html'">Sign Up</button>
+  </div>
+</div>
+
+<div class="card signup-card">
+  <h2 class="signup-title">Create Your Account</h2>
+  <p class="signup-subtitle">Join TaRoShield and stay protected</p>
+
+  <!-- Message box -->
+  <div id="msgBox" style="display:none; padding:12px; border-radius:8px; margin-bottom:16px; font-size:14px; text-align:center;"></div>
+
+  <div class="signup-form">
+    <input type="text" id="fullName" placeholder="Full Name" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password (min 6 characters)" required>
+    <button class="signup-submit" id="signupBtn" onclick="doSignup()">Create Account</button>
+  </div>
+
+  <p class="signup-footer">
+    Already have an account? <a href="login.html">Login</a>
+  </p>
+</div>
+
+<script>
+async function doSignup() {
+  const full_name = document.getElementById("fullName").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const btn = document.getElementById("signupBtn");
+  const msgBox = document.getElementById("msgBox");
+
+  if (!full_name || !email || !password) {
+    showMsg("Please fill in all fields.", "error");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Creating account...";
+
+  try {
+    const res = await fetch("http://127.0.0.1:5000/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ full_name, email, password })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      showMsg("✅ " + data.message, "success");
+      setTimeout(() => location.href = "login.html", 1500);
+    } else {
+      showMsg("❌ " + data.message, "error");
+      btn.disabled = false;
+      btn.textContent = "Create Account";
+    }
+  } catch (err) {
+    showMsg("❌ Cannot connect to server. Make sure Flask is running.", "error");
+    btn.disabled = false;
+    btn.textContent = "Create Account";
+  }
+}
+
+function showMsg(text, type) {
+  const box = document.getElementById("msgBox");
+  box.textContent = text;
+  box.style.display = "block";
+  box.style.background = type === "success" ? "rgba(46,204,113,0.15)" : "rgba(231,76,60,0.15)";
+  box.style.border = type === "success" ? "1px solid #2ecc71" : "1px solid #e74c3c";
+  box.style.color = type === "success" ? "#2ecc71" : "#e74c3c";
+}
+
+// Allow Enter key
+document.addEventListener("keydown", e => { if (e.key === "Enter") doSignup(); });
+</script>
+</body>
+</html>
